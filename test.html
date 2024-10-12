@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TCG Card Store Search</title>
+    <style>        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: auto;
+            padding: 20px;
+            background-color: #f4f4f4;
+            color: #333;
+        }
+        h1, h2, h3 {
+            color: #2c3e50;
+            margin-top: 10px;
+            margin-bottom: 5px;
+        }
+        .section {
+            margin-bottom: 10px;
+            padding: 10px;
+            background-color: #fff;
+            border: 1px solid #ccc;
+            border-radius: 8px;
+        }
+        button {
+            margin: 5px 5px 5px 0;
+            padding: 8px 12px;
+            background-color: #3498db;
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #2980b9;
+        }
+        .store-label {
+            display: block;
+            margin: 5px 0;
+        }
+        #card-name {
+            width: 100%;
+            padding: 10px;
+            margin-top: 10px;
+            margin-bottom: 15px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+        #search-button {
+            width: 100%;
+            margin-top: 10px;
+            padding: 10px;
+            background-color: #2c3e50;
+        }</style>
+    <script type="text/javascript">
+        // Define the list of stores in a JavaScript object
+        const stores = {
+            pog: [
+                { name: "Enter the Battlefield", url: "https://enterthebattlefield.ca/search.php?product_line=All&sort=Relevance&limit=30&name={cardName}&search_query={cardName}" },
+                { name: "Le Coin Du Jeu", url: "https://www.lecoindujeu.ca/search?filter.p.product_type=Flesh+And+Blood+Single&filter.v.availability=1&q={cardName}" },
+                { name: "Invasion CNC", url: "https://invasioncnc.ca/search.php?product_line=All&sort=Relevance&limit=30&name={cardName}&search_query={cardName}" },
+                { name: "401 Games", url: "https://store.401games.ca/pages/search-results?q={cardName}&filters=Category,Flesh+and+Blood+Singles,In+Stock,True" },
+                { name: "Red Dragon", url: "https://red-dragon.ca/search?type=product&options%5Bprefix%5D=last&q={cardName}" },
+                { name: "Dragon's Lair", url: "https://dragonslair.ca/search?q={cardName}" },
+            ],
+            mid: [
+                { name: "Game Knight", url: "https://gameknight.ca/search?page=1&q=%2A{cardName}%2A" },
+                { name: "Duel Kingdom", url: "https://duelkingdom.ca/search?filter.p.product_type=Flesh+And+Blood+Single&filter.v.availability=1&options%5Bprefix%5D=last&q={cardName}" },
+                { name: "Mystic Games", url: "https://mysticgames.ca/search?q={cardName}" }
+            ],
+            tcgplayer: [
+                { name: "Manta tcgplayer", url: "https://www.tcgplayer.com/search/flesh-and-blood-tcg/product?productLineName=flesh-and-blood-tcg&q={cardName}&view=grid" },
+            ],
+
+        };
+
+        // Function to dynamically load the stores into the HTML
+        function loadStores() {
+            const container = document.getElementById("store-sections");
+
+            // Iterate over each section in the stores object
+            for (const sectionName in stores) {
+                if (stores.hasOwnProperty(sectionName)) {
+                    // Create section container
+                    const sectionDiv = document.createElement("div");
+                    sectionDiv.className = "section";
+                    sectionDiv.id = `${sectionName}-stores`;
+
+                    // Add section header and buttons
+                    const sectionHeader = document.createElement("h4");
+                    sectionHeader.textContent = capitalizeFirstLetter(sectionName) + " Stores";
+
+                    const selectAllButton = document.createElement("button");
+                    selectAllButton.textContent = `Select All ${capitalizeFirstLetter(sectionName)}`;
+                    selectAllButton.onclick = () => toggleSection(sectionName, true);
+
+                    const deselectAllButton = document.createElement("button");
+                    deselectAllButton.textContent = `Deselect All ${capitalizeFirstLetter(sectionName)}`;
+                    deselectAllButton.onclick = () => toggleSection(sectionName, false);
+
+                    sectionDiv.appendChild(sectionHeader);
+                    sectionDiv.appendChild(selectAllButton);
+                    sectionDiv.appendChild(deselectAllButton);
+
+                    // Create checkbox group for stores
+                    const checkboxGroup = document.createElement("div");
+                    checkboxGroup.className = `checkbox-group ${sectionName}`;
+
+                    // Add each store as a checkbox
+                    stores[sectionName].forEach(store => {
+                        const label = document.createElement("label");
+                        label.className = "store-label";
+                        label.innerHTML = `<input type="checkbox" value="${store.url}"> ${store.name}`;
+                        checkboxGroup.appendChild(label);
+                    });
+
+                    sectionDiv.appendChild(checkboxGroup);
+                    container.appendChild(sectionDiv);
+                }
+            }
+        }
+
+        // Function to toggle selection for a section
+        function toggleSection(section, checked) {
+            const checkboxes = document.querySelectorAll(`.${section} input[type='checkbox']`);
+            checkboxes.forEach(cb => cb.checked = checked);
+        }
+
+        // Function to open tabs for the selected stores
+        function openTabs() {
+            const cardName = document.getElementById("card-name").value;
+            if (!cardName) {
+                alert("Please enter a card name.");
+                return;
+            }
+
+            const encodedCardName = encodeURIComponent(cardName);
+            const selectedStores = document.querySelectorAll('input[type="checkbox"]:checked');
+
+            selectedStores.forEach(store => {
+                if (store.value) {
+                    const searchUrl = store.value.replace('{cardName}', encodedCardName);
+                    window.open(searchUrl, '_blank');
+                }
+            });
+        }
+
+        // Utility function to capitalize the first letter of a string
+        function capitalizeFirstLetter(string) {
+            return string.charAt(0).toUpperCase() + string.slice(1);
+        }
+
+        // Load the stores when the window loads
+        window.onload = loadStores;
+    </script>
+</head>
+<body>
+    <h1>TCG Card Store Search</h1>
+
+
+    <div id="store-sections">
+        <!-- Store sections will be dynamically loaded here -->
+    </div>
+    <input type="text" id="card-name" placeholder="Enter the TCG card name">
+    <button id="search-button" onclick="openTabs()">Search Selected Stores</button>
+</body>
+</html>
