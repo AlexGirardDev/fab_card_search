@@ -63,7 +63,6 @@
                 { name: "Invasion CNC", url: "https://invasioncnc.ca/search.php?product_line=All&sort=Relevance&limit=30&name={cardName}&search_query={cardName}" },
                 { name: "401 Games", url: "https://store.401games.ca/pages/search-results?q={cardName}&filters=Category,Flesh+and+Blood+Singles,In+Stock,True" },
                 { name: "Red Dragon", url: "https://red-dragon.ca/search?type=product&options%5Bprefix%5D=last&q={cardName}" },
-                { name: "Dragon's Lair", url: "https://dragonslair.ca/search?q={cardName}" },
             ],
             mid: [
                 { name: "Manta tcgplayer", url: "https://mysticgames.ca/search?q={cardName}" },
@@ -78,8 +77,10 @@
         };
 
         // Function to dynamically load the stores into the HTML
+// Function to dynamically load the stores into the HTML
         function loadStores() {
             const container = document.getElementById("store-sections");
+            let isFirstSection = true;
 
             // Iterate over each section in the stores object
             for (const sectionName in stores) {
@@ -90,7 +91,7 @@
                     sectionDiv.id = `${sectionName}-stores`;
 
                     // Add section header and buttons
-                    const sectionHeader = document.createElement("h4");
+                    const sectionHeader = document.createElement("h3");
                     sectionHeader.textContent = capitalizeFirstLetter(sectionName) + " Stores";
 
                     const selectAllButton = document.createElement("button");
@@ -113,12 +114,15 @@
                     stores[sectionName].forEach(store => {
                         const label = document.createElement("label");
                         label.className = "store-label";
-                        label.innerHTML = `<input type="checkbox" value="${store.url}"> ${store.name}`;
+                        label.innerHTML = `<input type="checkbox" value="${store.url}" ${isFirstSection ? 'checked' : ''}> ${store.name}`;
                         checkboxGroup.appendChild(label);
                     });
 
                     sectionDiv.appendChild(checkboxGroup);
                     container.appendChild(sectionDiv);
+
+                    // Mark first section as processed
+                    isFirstSection = false;
                 }
             }
         }
@@ -151,10 +155,33 @@
         // Utility function to capitalize the first letter of a string
         function capitalizeFirstLetter(string) {
             return string.charAt(0).toUpperCase() + string.slice(1);
-        }
+        }     
+// Add an event listener for pressing "Enter" in the text box
+          window.onload = function() {
+              loadStores();
+
+              // Set focus to the card name input field
+              document.getElementById("card-name").focus();
+
+              document.getElementById("card-name").addEventListener("keydown", function(event) {
+                  if (event.key === "Enter") {
+                      openTabs();
+                  }
+              });
+
+              // Check for 'q' query parameter in the URL
+              const urlParams = new URLSearchParams(window.location.search);
+              const query = urlParams.get('q');
+              if (query) {
+                  // Set the card name input to the query value
+                  document.getElementById("card-name").value = query;
+
+                  // Perform a search with the first section of stores
+                  openTabs();
+              }
+          }
 
         // Load the stores when the window loads
-        window.onload = loadStores;
     </script>
 </head>
 <body>
