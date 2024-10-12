@@ -14,9 +14,9 @@ https://red-dragon.ca/search?type=product&options%5Bprefix%5D=last&q=earthlore+b
 
 ## store list (from discord)
 [N] Just my game: https://www.etsy.com/ca/shop/JustMyGame~~
-] Kessel Run Games (Ottawa): https://kesselrungames.ca/collections/other-ccgs/flesh-blood-booster-box
+[] Kessel Run Games (Ottawa): https://kesselrungames.ca/collections/other-ccgs/flesh-blood-booster-box
 [] Le chevalier (Quebec): http://boutiquelechevalier.com/
-[] Le coin du jeu (Quebec): http://www.lecoindujeu.ca/
+[Y] Le coin du jeu (Quebec): http://www.lecoindujeu.ca/
 [] Magic stronghold (bc): https://www.magicstronghold.com
 [] Manta Gaming (markham ONT): https://mantatrading.com/collections/flesh-and-blood-booster-box
 [] Midgard gaming (Newfoundland): https://shop.midgardgaming.com/
@@ -36,7 +36,7 @@ https://red-dragon.ca/search?type=product&options%5Bprefix%5D=last&q=earthlore+b
 [] Waypoint games (hamilton)  https://waypointgames.ca/
 [] Wizards tower (ottawa): https://www.wizardtower.com/
 [] Xlevel hobbies (ontario): https://xlevelhobbies.com/
-[] 401 games (GTA): https://store.401games.ca/collections/flesh-and-blood-trading-card-game
+[Y] 401 games (GTA): https://store.401games.ca/collections/flesh-and-blood-trading-card-game
 [] Atlas Collectables (waterloo): https://www.atlascollectables.com/catalog/flesh_and_blood_sealed/15411
 [] BD Cosmos (QC): https://bdcosmos.com/
 [] Bento Gaming (Calgary): https://www.bentogaming.com/product-category/flesh-and-blood-tcg/
@@ -48,8 +48,8 @@ https://red-dragon.ca/search?type=product&options%5Bprefix%5D=last&q=earthlore+b
 [] Derpy Cards (richmonhill ONT) https://derpycards.ca/
 [] Dolly's (GTA):https://www.dollys.ca/catalog/flesh_and_blood_tcg_products/6128
 [] Dream Escape (Alberta): https://www.dreamescapegaming.com/
-[] Dual Kingdom (Barrie): https://duelkingdom.ca/collections/flesh-and-blood-sealed-product
-[] Enter the battlefield (newmarket): https://www.enterthebattlefield.ca/
+[Y] Dual Kingdom (Barrie): https://duelkingdom.ca/collections/flesh-and-blood-sealed-product
+[Y] Enter the battlefield (newmarket): https://www.enterthebattlefield.ca/
 [] Face 2 Face (Montreal): https://www.facetofacegames.com/flesh-and-blood/
 [] Forest City Coins (london): https://forestcitycoins.com/
 [] Fusion Gaming (Winnipeg):  https://www.fusiongamingonline.com/catalog/flesh_and_blood/12255
@@ -62,5 +62,5 @@ https://red-dragon.ca/search?type=product&options%5Bprefix%5D=last&q=earthlore+b
 [] Hobby Knight: (newmarket ont): https://shop.hobbyknightincanada.ca/
 [] Hobbysville (Ontario): https://hobbiesville.com/collections/flesh-and-blood-tcg
 [] Infinity Cards (BC): https://www.infinitycards.ca
-[] Invasion inc (richmondhill Ont) Https://invasioncnc.ca
+[Y] Invasion inc (richmondhill Ont) Https://invasioncnc.ca
 [] Juexaz games (QC): https://jeuxaz.games/en
