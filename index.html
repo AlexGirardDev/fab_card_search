@@ -67,8 +67,8 @@
                 
           ],
             TCGPlayer: [
-                { name: "Manta tcgplayer", url: "https://www.tcgplayer.com/search/flesh-and-blood-tcg/product?productLineName=flesh-and-blood-tcg&q={cardName}&view=grid" },
-            ],
+                { name: "Manta tcgplayer", url: "https://www.tcgplayer.com/search/flesh-and-blood-tcg/product?productLineName=flesh-and-blood-tcg&q={cardName}&view=grid" }
+            ]
 
         };
 // { name: "401 Games", url: "https://store.401games.ca/pages/search-results?q={cardName}&filters=Category,Flesh+and+Blood+Singles,In+Stock,True" },
@@ -88,7 +88,7 @@
 
                     // Add section header and buttons
                     const sectionHeader = document.createElement("h3");
-                    sectionHeader.textContent = capitalitzeFirstLetter(sectionName) + " Stores";
+                    sectionHeader.textContent = capitalizeFirstLetter(sectionName) + " Stores";
 
                     const selectAllButton = document.createElement("button");
                     selectAllButton.textContent = `Select All ${capitalizeFirstLetter(sectionName)}`;
