@@ -52,3 +52,13 @@ Example: `http://alexgirarddev.github.io/fab_card_search?q=Bolt`
 - Stores are grouped into sections (GameStores, TCGPlayer) in the stores object
 - Each section gets select/deselect buttons automatically
 - First section stores are checked by default on page load
+
+## Commit Message Style
+
+Keep commit messages concise and action-oriented:
+- **Format**: `Feature/Fix - brief description`
+- **Title**: One line, under 60 characters when possible
+- **Body**: Optional bullet points for key changes (keep short)
+- **Example**: `Add drag-and-drop reordering, province labels, and localStorage persistence`
+- Avoid verbose descriptions; focus on what was added/changed
+- No need for full sentences, use bullets for multiple changes

@@ -4,7 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Canadian FAB Singles search</title>
-    <style>        body {
+    <style>
+        body {
             font-family: Arial, sans-serif;
             max-width: 800px;
             margin: auto;
@@ -38,7 +39,28 @@
         }
         .store-label {
             display: block;
-            margin: 5px 0;
+            margin: 0;
+            padding: 8px 0;
+            background-color: transparent;
+            border: none;
+            border-bottom: 1px solid #e8e8e8;
+            cursor: move;
+            user-select: none;
+            transition: background-color 0.15s ease;
+        }
+        .store-label:hover {
+            background-color: #f5f5f5;
+        }
+        .store-label:last-child {
+            border-bottom: none;
+        }
+        .store-label.dragging {
+            opacity: 0.6;
+            background-color: #e3f2fd;
+        }
+        .store-label.drag-over {
+            background-color: #e0f2f1;
+            border-bottom: 2px solid #009688;
         }
         #card-name {
             width: 100%;
@@ -53,35 +75,136 @@
             margin-top: 10px;
             padding: 10px;
             background-color: #2c3e50;
-        }</style>
+        }
+    </style>
     <script type="text/javascript">
         // Define the list of stores in a JavaScript object
         const stores = {
             GameStores: [
-                { name: "Red Dragon", url: "https://red-dragon.ca/search?type=product&options%5Bprefix%5D=last&q={cardName}" },
-                { name :"Fantasy Forged",url:"https://www.fantasyforged.ca/search?type=product&options%5Bprefix%5D=last&q={cardName}"},
-            { name: "mkkards", url: "https://mkkards.com/search?type=product&q={cardName}" },
-                { name: "Duel Kingdom", url: "https://duelkingdom.ca/search?filter.p.product_type=Flesh+And+Blood+Single&filter.v.availability=1&options%5Bprefix%5D=last&q={cardName}" },
-                { name: "Le Coin Du Jeu", url: "https://www.lecoindujeu.ca/search?filter.p.product_type=Flesh+And+Blood+Single&filter.v.availability=1&q={cardName}" },
-                { name: "Invasion CNC", url: "https://invasioncnc.ca/search.php?product_line=All&sort=Relevance&limit=30&name={cardName}&search_query={cardName}" },
-                { name: "Chimera Gaming Online", url: "https://chimeragamingonline.com/pages/mtg-advanced-search?q={cardName}&game=fleshAndBlood&availabilty=true&condition=&printing=&setNames=&rarities=&types=&pricemin=&pricemax=&page=1&order=price-descending" },
-                { name:"GTGames.ca",url:"https://gtgames.ca/pages/advanced-search?q={cardName}&game=fleshAndBlood&availabilty=true&setNames=&rarities=&types=&pricemin=&pricemax=&page=1&order=price-descending"},
-                { name: "Signarus", url: "https://signarus.ca/search?type=product&options%5Bprefix%5D=last&q={cardName}" },
-                { name: "Enter the Battlefield", url: "https://enterthebattlefield.ca/search.php?product_line=All&sort=Relevance&limit=30&name={cardName}" },
-                { name: "Negative Zone Comics", url: "https://negativezonecomics.com/search?type=product&options%5Bprefix%5D=last&q={cardName}" },
-                { name: "Tabletop Giant", url: "https://tabletopgiant.ca/search?type=product&options%5Bprefix%5D=last&q={cardName}" },
-                { name: "VGNJ", url: "https://vgnj.ca/search?type=product&options%5Bprefix%5D=last&q={cardName}" },
-                { name: "Silver Goblin", url: "https://silvergoblin.cards/search?q={cardName}&options%5Bprefix%5D=last" },
-                { name: "Cartes Léo", url: "https://cartesleo.ca/search?q={cardName}*" },
-                { name: "Magic Stronghold", url: "https://www.magicstronghold.com/store/search/{cardName}" },
-                { name: "Orchard City Games", url: "https://www.orchardcitygames.com/products/search?q={cardName}&c=13773" },
-                { name: "Exo Games", url: "https://exorgames.com/a/search?type=product&options%5Bprefix%5D=last&q={cardName}" },
-                { name: "Tista", url: "https://tistacards.com/search?type=product&options%5Bprefix%5D=last&q={cardName}" }
+                { name: "Enter the Battlefield", province: "ON", url: "https://enterthebattlefield.ca/search.php?product_line=All&sort=Relevance&limit=30&name={cardName}" },
+                { name: "Invasion CNC", province: "ON", url: "https://invasioncnc.ca/search.php?product_line=All&sort=Relevance&limit=30&name={cardName}&search_query={cardName}" },
+                { name: "Tista", province: "ON", url: "https://tistacards.com/search?type=product&options%5Bprefix%5D=last&q={cardName}" },
+                { name: "Red Dragon", province: "ON", url: "https://red-dragon.ca/search?type=product&options%5Bprefix%5D=last&q={cardName}" },
+                { name: "Fantasy Forged", province: "ON", url: "https://www.fantasyforged.ca/search?type=product&options%5Bprefix%5D=last&q={cardName}"},
+                { name: "mkkards", province: "ON", url: "https://mkkards.com/search?type=product&q={cardName}" },
+                { name: "Duel Kingdom", province: "ON", url: "https://duelkingdom.ca/search?filter.p.product_type=Flesh+And+Blood+Single&filter.v.availability=1&options%5Bprefix%5D=last&q={cardName}" },
+                { name: "Chimera Gaming Online", province: "ON", url: "https://chimeragamingonline.com/pages/mtg-advanced-search?q={cardName}&game=fleshAndBlood&availabilty=true&condition=&printing=&setNames=&rarities=&types=&pricemin=&pricemax=&page=1&order=price-descending" },
+                { name: "GTGames.ca", province: "ON", url: "https://gtgames.ca/pages/advanced-search?q={cardName}&game=fleshAndBlood&availabilty=true&setNames=&rarities=&types=&pricemin=&pricemax=&page=1&order=price-descending"},
+                { name: "Negative Zone Comics", province: "ON", url: "https://negativezonecomics.com/search?type=product&options%5Bprefix%5D=last&q={cardName}" },
+                { name: "Tabletop Giant", province: "ON", url: "https://tabletopgiant.ca/search?type=product&options%5Bprefix%5D=last&q={cardName}" },
+                { name: "VGNJ", province: "ON", url: "https://vgnj.ca/search?type=product&options%5Bprefix%5D=last&q={cardName}" },
+                { name: "Le Coin Du Jeu", province: "QC", url: "https://www.lecoindujeu.ca/search?filter.p.product_type=Flesh+And+Blood+Single&filter.v.availability=1&q={cardName}" },
+                { name: "Silver Goblin", province: "QC", url: "https://silvergoblin.cards/search?q={cardName}&options%5Bprefix%5D=last" },
+                { name: "Cartes Léo", province: "QC", url: "https://cartesleo.ca/search?q={cardName}*" },
+                { name: "Magic Stronghold", province: "BC", url: "https://www.magicstronghold.com/store/search/{cardName}" },
+                { name: "Orchard City Games", province: "BC", url: "https://www.orchardcitygames.com/products/search?q={cardName}&c=13773" },
+                { name: "Signarus", province: "AB", url: "https://signarus.ca/search?type=product&options%5Bprefix%5D=last&q={cardName}" },
+                { name: "Exo Games", province: "PE", url: "https://exorgames.com/a/search?type=product&options%5Bprefix%5D=last&q={cardName}" }
           ],
             TCGPlayer: [
-                { name: "Manta tcgplayer", url: "https://www.tcgplayer.com/search/flesh-and-blood-tcg/product?productLineName=flesh-and-blood-tcg&q={cardName}&view=grid" }
+                { name: "Manta tcgplayer", province: "Online", url: "https://www.tcgplayer.com/search/flesh-and-blood-tcg/product?productLineName=flesh-and-blood-tcg&q={cardName}&view=grid" }
             ]
         };
+
+        let draggedElement = null;
+
+        function saveStoreState() {
+            const state = {};
+            for (const sectionName in stores) {
+                const labels = document.querySelectorAll(`.${sectionName} .store-label`);
+                state[sectionName] = {
+                    checked: Array.from(labels)
+                        .filter(label => label.querySelector('input[type="checkbox"]').checked)
+                        .map(label => label.dataset.storeName),
+                    order: Array.from(labels).map(label => label.dataset.storeName)
+                };
+            }
+            localStorage.setItem('storeState', JSON.stringify(state));
+        }
+
+        function restoreStoreState() {
+            const saved = localStorage.getItem('storeState');
+            if (!saved) return;
+
+            const state = JSON.parse(saved);
+            for (const sectionName in state) {
+                // Restore order first
+                const checkboxGroup = document.querySelector(`.checkbox-group.${sectionName}`);
+                if (checkboxGroup && state[sectionName].order) {
+                    const labels = Array.from(checkboxGroup.querySelectorAll('.store-label'));
+                    state[sectionName].order.forEach(storeName => {
+                        const label = labels.find(l => l.dataset.storeName === storeName);
+                        if (label) {
+                            checkboxGroup.appendChild(label);
+                        }
+                    });
+                }
+
+                // Then restore checkbox state
+                const labels = document.querySelectorAll(`.${sectionName} .store-label`);
+                labels.forEach(label => {
+                    const checkbox = label.querySelector('input[type="checkbox"]');
+                    checkbox.checked = state[sectionName].checked.includes(label.dataset.storeName);
+                });
+            }
+        }
+
+        function setupDragAndDrop() {
+            document.addEventListener('dragstart', (e) => {
+                if (e.target.classList.contains('store-label')) {
+                    draggedElement = e.target;
+                    e.target.classList.add('dragging');
+                    e.dataTransfer.effectAllowed = 'move';
+                }
+            });
+
+            document.addEventListener('dragover', (e) => {
+                e.preventDefault();
+                e.dataTransfer.dropEffect = 'move';
+                if (e.target.classList.contains('store-label') && e.target !== draggedElement) {
+                    e.target.classList.add('drag-over');
+                }
+            });
+
+            document.addEventListener('dragleave', (e) => {
+                if (e.target.classList.contains('store-label')) {
+                    e.target.classList.remove('drag-over');
+                }
+            });
+
+            document.addEventListener('drop', (e) => {
+                e.preventDefault();
+                if (e.target.classList.contains('store-label') && e.target !== draggedElement) {
+                    const parent = e.target.parentNode;
+                    const allLabels = Array.from(parent.querySelectorAll('.store-label'));
+                    const draggedIndex = allLabels.indexOf(draggedElement);
+                    const targetIndex = allLabels.indexOf(e.target);
+
+                    if (draggedIndex < targetIndex) {
+                        e.target.parentNode.insertBefore(draggedElement, e.target.nextSibling);
+                    } else {
+                        e.target.parentNode.insertBefore(draggedElement, e.target);
+                    }
+                    saveStoreState();
+                }
+                if (draggedElement) {
+                    draggedElement.classList.remove('dragging');
+                }
+                e.target.classList.remove('drag-over');
+                draggedElement = null;
+            });
+
+            document.addEventListener('dragend', (e) => {
+                if (draggedElement) {
+                    draggedElement.classList.remove('dragging');
+                    draggedElement = null;
+                }
+                document.querySelectorAll('.store-label').forEach(label => {
+                    label.classList.remove('drag-over');
+                });
+            });
+        }
+
         function loadStores() {
             const container = document.getElementById("store-sections");
             let isFirstSection = true;
@@ -100,11 +223,17 @@
 
                     const selectAllButton = document.createElement("button");
                     selectAllButton.textContent = `Select All ${capitalizeFirstLetter(sectionName)}`;
-                    selectAllButton.onclick = () => toggleSection(sectionName, true);
+                    selectAllButton.onclick = () => {
+                        toggleSection(sectionName, true);
+                        saveStoreState();
+                    };
 
                     const deselectAllButton = document.createElement("button");
                     deselectAllButton.textContent = `Deselect All ${capitalizeFirstLetter(sectionName)}`;
-                    deselectAllButton.onclick = () => toggleSection(sectionName, false);
+                    deselectAllButton.onclick = () => {
+                        toggleSection(sectionName, false);
+                        saveStoreState();
+                    };
 
                     sectionDiv.appendChild(sectionHeader);
                     sectionDiv.appendChild(selectAllButton);
@@ -118,7 +247,18 @@
                     stores[sectionName].forEach(store => {
                         const label = document.createElement("label");
                         label.className = "store-label";
-                        label.innerHTML = `<input type="checkbox" value="${store.url}" ${isFirstSection ? 'checked' : ''}> ${store.name}`;
+                        label.draggable = true;
+                        label.dataset.storeName = `${store.name}|${store.province}`;
+                        const checkbox = document.createElement("input");
+                        checkbox.type = "checkbox";
+                        checkbox.value = store.url;
+                        checkbox.addEventListener('change', saveStoreState);
+                        // Check by default if province is ON (Ontario closest stores)
+                        if (store.province === "ON") {
+                            checkbox.checked = true;
+                        }
+                        label.appendChild(checkbox);
+                        label.appendChild(document.createTextNode(` ${store.name} - ${store.province}`));
                         checkboxGroup.appendChild(label);
                     });
 
@@ -129,6 +269,9 @@
                     isFirstSection = false;
                 }
             }
+
+            restoreStoreState();
+            setupDragAndDrop();
         }
 
         // Function to toggle selection for a section
@@ -146,9 +289,10 @@
             }
 
             const encodedCardName = encodeURIComponent(cardName);
-            const selectedStores = document.querySelectorAll('input[type="checkbox"]:checked');
+            const selectedStores = Array.from(document.querySelectorAll('input[type="checkbox"]:checked'));
 
-            selectedStores.forEach(store => {
+            // Open in reverse order so top items open last (become active tab)
+            selectedStores.reverse().forEach(store => {
                 if (store.value) {
                     const searchUrl = store.value.replace('{cardName}', encodedCardName);
                     window.open(searchUrl, '_blank');
@@ -159,33 +303,31 @@
         // Utility function to capitalize the first letter of a string
         function capitalizeFirstLetter(string) {
             return string.charAt(0).toUpperCase() + string.slice(1);
-        }     
-// Add an event listener for pressing "Enter" in the text box
-          window.onload = function() {
-              loadStores();
+        }
 
-              // Set focus to the card name input field
-              document.getElementById("card-name").focus();
+        window.onload = function() {
+            loadStores();
 
-              document.getElementById("card-name").addEventListener("keydown", function(event) {
-                  if (event.key === "Enter") {
-                      openTabs();
-                  }
-              });
+            // Set focus to the card name input field
+            document.getElementById("card-name").focus();
 
-              // Check for 'q' query parameter in the URL
-              const urlParams = new URLSearchParams(window.location.search);
-              const query = urlParams.get('q');
-              if (query) {
-                  // Set the card name input to the query value
-                  document.getElementById("card-name").value = query;
+            document.getElementById("card-name").addEventListener("keydown", function(event) {
+                if (event.key === "Enter") {
+                    openTabs();
+                }
+            });
 
-                  // Perform a search with the first section of stores
-                  openTabs();
-              }
-          }
+            // Check for 'q' query parameter in the URL
+            const urlParams = new URLSearchParams(window.location.search);
+            const query = urlParams.get('q');
+            if (query) {
+                // Set the card name input to the query value
+                document.getElementById("card-name").value = query;
 
-        // Load the stores when the window loads
+                // Perform a search with the first section of stores
+                openTabs();
+            }
+        }
     </script>
 </head>
 <body>
